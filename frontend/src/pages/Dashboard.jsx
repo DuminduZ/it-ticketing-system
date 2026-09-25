@@ -1,31 +1,54 @@
 import { useNavigate } from 'react-router-dom';
-import { useTicketContext } from '../context/TicketContext'; // Import hook
+import { useTicketContext } from '../context/TicketContext';
 import './Dashboard.css';
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { tickets } = useTicketContext(); // Get dynamic tickets
+  // Destructure the new functions here
+  const { tickets, updateTicketStatus, deleteTicket } = useTicketContext();
 
   return (
     <div className="dashboard-container">
-      <header className="dashboard-header">
+      <div className="dashboard-header">
         <h2>My Tickets</h2>
         <button className="new-ticket-btn" onClick={() => navigate('/new-ticket')}>
           + New Ticket
         </button>
-      </header>
-
+      </div>
+      
       <div className="ticket-list">
-        {/* Use the dynamic tickets array here */}
-        {tickets.map((ticket) => (
+        {tickets.map(ticket => (
           <div key={ticket.id} className="ticket-card">
             <div className="ticket-info">
               <h3>{ticket.title}</h3>
-              <span className="ticket-date">#{ticket.id} • Opened on {ticket.date}</span>
+              <p>#{ticket.id} • Opened on {ticket.date}</p>
             </div>
-            <div className="ticket-badges">
-              <span className={`badge priority-${ticket.priority.toLowerCase()}`}>{ticket.priority}</span>
-              <span className={`badge status-${ticket.status.toLowerCase()}`}>{ticket.status}</span>
+            <div className="ticket-actions">
+              <span className={`badge ${ticket.priority.toLowerCase()}`}>
+                {ticket.priority}
+              </span>
+              <span className={`badge ${ticket.status.toLowerCase()}`}>
+                {ticket.status}
+              </span>
+              
+              {/* Action Buttons */}
+              <div className="action-buttons" style={{ marginTop: '10px', display: 'flex', gap: '8px' }}>
+                {ticket.status !== 'RESOLVED' && (
+                  <button 
+                    onClick={() => updateTicketStatus(ticket.id, 'RESOLVED')}
+                    style={{ padding: '4px 8px', cursor: 'pointer', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px' }}
+                  >
+                    Resolve
+                  </button>
+                )}
+                <button 
+                  onClick={() => deleteTicket(ticket.id)}
+                  style={{ padding: '4px 8px', cursor: 'pointer', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px' }}
+                >
+                  Delete
+                </button>
+              </div>
+
             </div>
           </div>
         ))}

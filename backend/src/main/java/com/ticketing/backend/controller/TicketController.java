@@ -38,4 +38,19 @@ public class TicketController {
         // Save to database and return the saved ticket (which will now have a generated ID)
         return ticketRepository.save(newTicket);
     }
+    
+    // PUT Request to update a ticket's status
+    @PutMapping("/{id}")
+    public Ticket updateTicketStatus(@PathVariable Long id, @RequestBody Ticket updatedTicket) {
+        return ticketRepository.findById(id).map(ticket -> {
+            ticket.setStatus(updatedTicket.getStatus());
+            return ticketRepository.save(ticket);
+        }).orElseThrow(() -> new RuntimeException("Ticket not found with id " + id));
+    }
+
+    // DELETE Request to remove a ticket
+    @DeleteMapping("/{id}")
+    public void deleteTicket(@PathVariable Long id) {
+        ticketRepository.deleteById(id);
+    }
 }

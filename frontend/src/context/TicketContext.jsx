@@ -5,7 +5,6 @@ const TicketContext = createContext();
 export function TicketProvider({ children }) {
   const [tickets, setTickets] = useState([]);
 
-  // Fetch all tickets from Spring Boot when the app loads
   useEffect(() => {
     fetch('http://localhost:8080/api/tickets')
       .then(res => res.json())
@@ -13,14 +12,10 @@ export function TicketProvider({ children }) {
       .catch(err => console.error("Failed to fetch tickets:", err));
   }, []);
 
-  // Send a new ticket to Spring Boot
   const addTicket = (newTicket) => {
     fetch('http://localhost:8080/api/tickets', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      // We no longer need to generate a random ID here; the database handles it
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         title: newTicket.title,
         description: newTicket.description,
@@ -29,15 +24,38 @@ export function TicketProvider({ children }) {
       })
     })
     .then(res => res.json())
-    .then(savedTicket => {
-      // Add the database-generated ticket to the UI
-      setTickets(prev => [...prev, savedTicket]);
-    })
+    .then(savedTicket => setTickets(prev => [...prev, savedTicket]))
     .catch(err => console.error("Failed to save ticket:", err));
   };
 
+  // NEW: Update ticket status
+  const updateTicketStatus = (id, newStatus) => {
+    fetch(`http://localhost:8080/api/tickets/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus })
+    })
+    .then(res => res.json())
+    .then(updatedTicket => {
+      setTickets(prev => prev.map(t => t.id === id ? updatedTicket : t));
+    })
+    .catch(err => console.error("Failed to update ticket:", err));
+  };
+
+  // NEW: Delete a ticket
+  const deleteTicket = (id) => {
+    fetch(`http://localhost:8080/api/tickets/${id}`, {
+      method: 'DELETE'
+    })
+    .then(() => {
+      setTickets(prev => prev.filter(t => t.id !== id));
+    })
+    .catch(err => console.error("Failed to delete ticket:", err));
+  };
+
   return (
-    <TicketContext.Provider value={{ tickets, addTicket }}>
+    // Added the new functions to the value object
+    <TicketContext.Provider value={{ tickets, addTicket, updateTicketStatus, deleteTicket }}>
       {children}
     </TicketContext.Provider>
   );
