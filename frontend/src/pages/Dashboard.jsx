@@ -36,18 +36,18 @@ export default function Dashboard() {
               </span>
               
               {/* Action Buttons */}
-              <div className="action-buttons" style={{ marginTop: '10px', display: 'flex', gap: '8px' }}>
+              <div className="action-buttons" style={{ display: 'flex', gap: '8px' }}>
                 {ticket.status !== 'RESOLVED' && (
                   <button 
                     onClick={() => updateTicketStatus(ticket.id, 'RESOLVED')}
-                    style={{ padding: '4px 8px', cursor: 'pointer', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px' }}
+                    style={{ padding: '6px 12px', cursor: 'pointer', background: 'var(--success)', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}
                   >
                     Resolve
                   </button>
                 )}
                 <button 
                   onClick={() => deleteTicket(ticket.id)}
-                  style={{ padding: '4px 8px', cursor: 'pointer', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px' }}
+                  style={{ padding: '6px 12px', cursor: 'pointer', background: 'transparent', color: 'var(--danger)', border: '1px solid var(--danger)', borderRadius: '4px', fontWeight: 'bold' }}
                 >
                   Delete
                 </button>

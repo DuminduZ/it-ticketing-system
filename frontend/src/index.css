@@ -1,11 +1,28 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: system-ui, -apple-system, sans-serif;
+/* Define the color palette variables */
+:root {
+  --bg-background: #0f172a;     /* Deep Slate */
+  --bg-surface: #1e293b;        /* Lighter Slate for cards */
+  --text-primary: #f8fafc;      /* Almost white */
+  --text-secondary: #94a3b8;    /* Muted gray */
+  --accent-primary: #3b82f6;    /* Bright Blue */
+  --accent-hover: #2563eb;      /* Darker Blue */
+  --danger: #ef4444;            /* Red for delete */
+  --success: #10b981;           /* Green for resolve */
+  --border-color: #334155;
 }
 
+/* Apply the theme to the entire app */
 body {
-  background-color: #f4f7f6;
-  color: #333;
+  margin: 0;
+  background-color: var(--bg-background);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Global input styles */
+input {
+  background-color: var(--bg-background);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
 }

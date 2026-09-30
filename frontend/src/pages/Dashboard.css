@@ -1,7 +1,7 @@
 .dashboard-container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 0 20px;
+  padding: 32px;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .dashboard-header {
@@ -9,21 +9,28 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 16px;
+}
+
+.dashboard-header h2 {
+  margin: 0;
+  color: var(--text-primary);
 }
 
 .new-ticket-btn {
-  background: #007bff;
+  background-color: var(--accent-primary);
   color: white;
   border: none;
-  padding: 10px 16px;
+  padding: 10px 20px;
   border-radius: 6px;
-  font-weight: 600;
+  font-weight: bold;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background-color 0.2s;
 }
 
 .new-ticket-btn:hover {
-  background: #0056b3;
+  background-color: var(--accent-hover);
 }
 
 .ticket-list {
@@ -32,44 +39,52 @@
   gap: 16px;
 }
 
+/* Ticket Card Dark Theme */
 .ticket-card {
-  background: white;
-  padding: 16px 20px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-left: 4px solid #e0e0e0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.ticket-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-primary);
 }
 
 .ticket-info h3 {
-  margin-bottom: 6px;
-  font-size: 1.1rem;
+  margin: 0 0 8px 0;
+  color: var(--text-primary);
 }
 
-.ticket-date {
-  font-size: 0.85rem;
-  color: #666;
+.ticket-info p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
 }
 
-.ticket-badges {
+.ticket-actions {
   display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   gap: 12px;
 }
 
+/* Soft Dark-Mode Badges */
 .badge {
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
 }
 
-/* Dynamic Badge Colors */
-.priority-high, .priority-urgent { background: #ffebee; color: #c62828; }
-.priority-medium { background: #fff3e0; color: #ef6c00; }
-.priority-low { background: #e8f5e9; color: #2e7d32; }
-
-.status-open, .status-new { background: #e3f2fd; color: #1565c0; }
-.status-in_progress { background: #fff8e1; color: #f57f17; }
+.badge.urgent { background-color: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+.badge.high { background-color: rgba(245, 158, 11, 0.2); color: #fcd34d; }
+.badge.low { background-color: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+.badge.new { background-color: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+.badge.resolved { background-color: rgba(148, 163, 184, 0.2); color: #cbd5e1; text-decoration: line-through; }

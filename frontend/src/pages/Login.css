@@ -3,22 +3,22 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f4f7f6;
 }
 
 .login-form {
-  background: white;
+  background: var(--bg-surface); /* Swapped from white */
   padding: 40px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   width: 100%;
   max-width: 400px;
+  border: 1px solid var(--border-color); /* Added border */
 }
 
 .login-form h2 {
   margin-top: 0;
   margin-bottom: 24px;
-  color: #333;
+  color: var(--text-primary); /* Swapped from #333 */
   text-align: center;
 }
 
@@ -31,7 +31,7 @@
 .input-group label {
   margin-bottom: 8px;
   font-weight: 600;
-  color: #555;
+  color: var(--text-secondary); /* Swapped from #555 */
   font-size: 14px;
 }
 
@@ -51,7 +51,7 @@
 .login-form button {
   width: 100%;
   padding: 12px;
-  background-color: #007bff;
+  background-color: var(--accent-primary);
   color: white;
   border: none;
   border-radius: 4px;
@@ -63,5 +63,23 @@
 }
 
 .login-form button:hover {
-  background-color: #0056b3;
+  background-color: var(--accent-hover);
+}
+
+/* Style for the Register/Login links at the bottom */
+.login-form a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.login-form a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+/* Make sure the "Don't have an account?" text is easy to read */
+.login-form .link-container {
+  color: var(--text-secondary);
 }
