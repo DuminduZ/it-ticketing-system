@@ -1,22 +1,39 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Register from './pages/Register';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import NewTicket from './pages/NewTicket';
-import { TicketProvider } from './context/TicketContext'; // Import this
+import NewTicket from './pages/NewTicket'; // Adjust path if needed
+import ProtectedRoute from './components/ProtectedRoute'; // Import our new checkpoint
+import { TicketProvider } from './context/TicketContext';
 
-function App() {
+export default function App() {
   return (
-    <TicketProvider> {/* Wrap the router */}
+    <TicketProvider>
       <BrowserRouter>
         <Routes>
+          {/* Public Route */}
           <Route path="/" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/new-ticket" element={<NewTicket />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/register" element={<Register />} />
+          {/* Protected Routes */}
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
+          
+          <Route 
+            path="/new-ticket" 
+            element={
+              <ProtectedRoute>
+                <NewTicket />
+              </ProtectedRoute>
+            } 
+          />
         </Routes>
       </BrowserRouter>
     </TicketProvider>
   );
 }
-
-export default App;

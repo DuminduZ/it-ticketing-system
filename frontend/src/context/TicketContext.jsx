@@ -13,6 +13,13 @@ export function TicketProvider({ children }) {
   }, []);
 
   const addTicket = (newTicket) => {
+    // 1. Retrieve the logged-in user from local storage
+    const loggedInUserStr = localStorage.getItem('ticketingUser');
+    const loggedInUser = loggedInUserStr ? JSON.parse(loggedInUserStr) : null;
+    
+    // 2. Extract their ID (fallback to 1 if something goes wrong)
+    const currentUserId = loggedInUser ? loggedInUser.id : 1;
+
     fetch('http://localhost:8080/api/tickets', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -20,11 +27,14 @@ export function TicketProvider({ children }) {
         title: newTicket.title,
         description: newTicket.description,
         priority: newTicket.priority,
-        status: 'NEW'
+        status: 'NEW',
+        creatorId: currentUserId // 3. Pass the dynamic ID to Spring Boot
       })
     })
     .then(res => res.json())
-    .then(savedTicket => setTickets(prev => [...prev, savedTicket]))
+    .then(savedTicket => {
+      setTickets(prev => [...prev, savedTicket]);
+    })
     .catch(err => console.error("Failed to save ticket:", err));
   };
 

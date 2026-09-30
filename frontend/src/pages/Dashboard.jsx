@@ -1,20 +1,24 @@
 import { useNavigate } from 'react-router-dom';
 import { useTicketContext } from '../context/TicketContext';
+import Navbar from '../components/Navbar'; // Import the new Navbar
 import './Dashboard.css';
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  // Destructure the new functions here
   const { tickets, updateTicketStatus, deleteTicket } = useTicketContext();
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <h2>My Tickets</h2>
-        <button className="new-ticket-btn" onClick={() => navigate('/new-ticket')}>
-          + New Ticket
-        </button>
-      </div>
+    <div>
+      <Navbar /> {/* Render the Navbar here */}
+      <div className="dashboard-container">
+        <div className="dashboard-header">
+          <h2>My Tickets</h2>
+          <button className="new-ticket-btn" onClick={() => navigate('/new-ticket')}>
+            + New Ticket
+          </button>
+        </div>
+      </div> 
+        {/* ... rest of your ticket list code remains exactly the same ... */}
       
       <div className="ticket-list">
         {tickets.map(ticket => (

@@ -32,4 +32,21 @@ public class UserController {
         // If email not found or password incorrect, return 401 Unauthorized
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody User newUser) {
+        // Prevent duplicate emails
+        if (userRepository.findByEmail(newUser.getEmail()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists");
+        }
+        
+        // Assign a default role if one isn't provided
+        if (newUser.getRole() == null || newUser.getRole().isEmpty()) {
+            newUser.setRole("EMPLOYEE");
+        }
+        
+        // Save to database
+        User savedUser = userRepository.save(newUser);
+        return ResponseEntity.ok(savedUser);
+    }
 }
