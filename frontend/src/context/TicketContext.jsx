@@ -5,44 +5,50 @@ const TicketContext = createContext();
 export function TicketProvider({ children }) {
   const [tickets, setTickets] = useState([]);
 
+  // Helper function to inject the JWT into requests
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem('ticketingToken');
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': token ? `Bearer ${token}` : ''
+    };
+  };
+
   useEffect(() => {
-    fetch('http://localhost:8080/api/tickets')
-      .then(res => res.json())
+    fetch('http://localhost:8080/api/tickets', { headers: getAuthHeaders() })
+      .then(res => {
+        if (!res.ok) throw new Error("Unauthorized");
+        return res.json();
+      })
       .then(data => setTickets(data))
       .catch(err => console.error("Failed to fetch tickets:", err));
   }, []);
 
   const addTicket = (newTicket) => {
-    // 1. Retrieve the logged-in user from local storage
     const loggedInUserStr = localStorage.getItem('ticketingUser');
     const loggedInUser = loggedInUserStr ? JSON.parse(loggedInUserStr) : null;
-    
-    // 2. Extract their ID (fallback to 1 if something goes wrong)
     const currentUserId = loggedInUser ? loggedInUser.id : 1;
 
     fetch('http://localhost:8080/api/tickets', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify({
         title: newTicket.title,
         description: newTicket.description,
         priority: newTicket.priority,
         status: 'NEW',
-        creatorId: currentUserId // 3. Pass the dynamic ID to Spring Boot
+        creatorId: currentUserId
       })
     })
     .then(res => res.json())
-    .then(savedTicket => {
-      setTickets(prev => [...prev, savedTicket]);
-    })
+    .then(savedTicket => setTickets(prev => [...prev, savedTicket]))
     .catch(err => console.error("Failed to save ticket:", err));
   };
 
-  // NEW: Update ticket status
   const updateTicketStatus = (id, newStatus) => {
     fetch(`http://localhost:8080/api/tickets/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify({ status: newStatus })
     })
     .then(res => res.json())
@@ -52,19 +58,16 @@ export function TicketProvider({ children }) {
     .catch(err => console.error("Failed to update ticket:", err));
   };
 
-  // NEW: Delete a ticket
   const deleteTicket = (id) => {
     fetch(`http://localhost:8080/api/tickets/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: getAuthHeaders()
     })
-    .then(() => {
-      setTickets(prev => prev.filter(t => t.id !== id));
-    })
+    .then(() => setTickets(prev => prev.filter(t => t.id !== id)))
     .catch(err => console.error("Failed to delete ticket:", err));
   };
 
   return (
-    // Added the new functions to the value object
     <TicketContext.Provider value={{ tickets, addTicket, updateTicketStatus, deleteTicket }}>
       {children}
     </TicketContext.Provider>

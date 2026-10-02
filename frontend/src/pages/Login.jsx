@@ -21,10 +21,14 @@ export default function Login() {
       });
 
       if (response.ok) {
-        const userData = await response.json();
-        // Save user to local storage to keep them logged in
-        localStorage.setItem('ticketingUser', JSON.stringify(userData));
-        navigate('/dashboard'); // Navigate to your dashboard
+        // The data now contains { token: "...", user: {...} }
+        const data = await response.json(); 
+        
+        // Save the user data AND the JWT token separately
+        localStorage.setItem('ticketingUser', JSON.stringify(data.user));
+        localStorage.setItem('ticketingToken', data.token); // Store the JWT
+        
+        navigate('/dashboard');
       } else {
         setError('Invalid email or password');
       }
